@@ -1,0 +1,55 @@
+{
+  "name": "@xiaoxiao6.0/flow-designer-react",
+  "version": "1.0.1",
+  "description": "流程设计器 React 适配器",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc && tsc --module esnext --outDir dist/esm",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "flow-designer",
+    "react",
+    "workflow",
+    "approval-flow"
+  ],
+  "author": "xiaochenyang1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaochenyang1/my-awesome-package.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/xiaochenyang1/my-awesome-package/issues"
+  },
+  "homepage": "https://github.com/xiaochenyang1/my-awesome-package#readme",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@xiaoxiao6.0/flow-designer-core": "^1.0.0",
+    "reactflow": "^11.11.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.3"
+  }
+}

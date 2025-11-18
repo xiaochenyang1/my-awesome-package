@@ -1,0 +1,106 @@
+{
+  "$schema": "流程配置模板（仅结构，用户填充数据）",
+
+  "id": "<用户指定的流程ID>",
+  "name": "<用户指定的流程名称>",
+  "version": "<用户指定的版本号，如 1.0.0>",
+  "description": "<流程描述（可选）>",
+
+  "nodes": [
+    {
+      "$comment": "节点示例 - 开始节点",
+      "id": "<节点ID，如 start-1>",
+      "type": "<节点类型，用户自定义，如 start, approval, condition, end>",
+      "title": "<节点标题，如：发起申请>",
+      "description": "<节点描述（可选）>",
+
+      "config": {
+        "$comment": "节点配置 - 完全动态",
+
+        "formSchema": [
+          {
+            "$comment": "表单字段示例 - 单行文本",
+            "name": "<字段名，如 title>",
+            "label": "<字段标签，如：申请标题>",
+            "type": "input",
+            "required": true,
+            "placeholder": "<占位符文字>",
+            "defaultValue": "<默认值（可选）>"
+          },
+          {
+            "$comment": "表单字段示例 - 单选框",
+            "name": "<字段名，如 type>",
+            "label": "<字段标签，如：申请类型>",
+            "type": "radio",
+            "required": true,
+            "options": [
+              {
+                "label": "<选项标签，如：请假>",
+                "value": "<选项值，如：leave>"
+              },
+              {
+                "label": "<选项标签，如：报销>",
+                "value": "<选项值，如：expense>"
+              }
+            ]
+          },
+          {
+            "$comment": "表单字段示例 - 下拉选择（支持动态加载）",
+            "name": "<字段名，如 approver>",
+            "label": "<字段标签，如：审批人>",
+            "type": "select",
+            "required": true,
+            "options": "<留空，通过 loaders.options 动态加载>"
+          },
+          {
+            "$comment": "表单字段示例 - 多行文本（支持条件显示）",
+            "name": "<字段名，如 reason>",
+            "label": "<字段标签，如：申请原因>",
+            "type": "textarea",
+            "required": true,
+            "visible": "<表达式，如：type === 'leave'>",
+            "validation": [
+              {
+                "type": "min",
+                "value": 10,
+                "message": "<错误消息，如：至少 10 个字>"
+              }
+            ]
+          },
+          {
+            "$comment": "表单字段示例 - 日期区间",
+            "name": "<字段名，如 dateRange>",
+            "label": "<字段标签，如：日期区间>",
+            "type": "dateRange",
+            "required": true
+          }
+        ],
+
+        "formValues": {},
+
+        "$comment": "其他自定义配置字段",
+        "<自定义字段名>": "<自定义值>"
+      },
+
+      "children": ["<子节点ID列表>"]
+    }
+  ],
+
+  "edges": [
+    {
+      "$comment": "连线示例",
+      "id": "<连线ID，如 edge-1>",
+      "source": "<源节点ID>",
+      "target": "<目标节点ID>",
+      "label": "<连线标签，如：提交、通过、驳回>"
+    }
+  ],
+
+  "settings": {
+    "layout": "<布局方式：dagre 或 manual>",
+    "direction": "<布局方向：LR（左右）、TB（上下）、RL、BT>",
+    "editable": true,
+    "draggable": true,
+    "nodeSpacing": 100
+  }
+}

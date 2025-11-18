@@ -1,0 +1,26 @@
+{
+  "name": "flow-designer-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "可拖拽流程编排组件 - Monorepo",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  },
+  "keywords": [
+    "flow-designer",
+    "approval-flow",
+    "workflow",
+    "react",
+    "vue",
+    "drag-drop"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.6"
+  }
+}

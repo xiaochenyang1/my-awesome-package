@@ -1,0 +1,44 @@
+{
+  "name": "@xiaoxiao6.0/flow-designer-core",
+  "version": "1.0.0",
+  "description": "流程设计器核心包 - 框架无关",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc && tsc --module esnext --outDir dist/esm",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "flow-designer",
+    "workflow",
+    "core",
+    "framework-agnostic"
+  ],
+  "author": "xiaochenyang1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaochenyang1/my-awesome-package.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/xiaochenyang1/my-awesome-package/issues"
+  },
+  "homepage": "https://github.com/xiaochenyang1/my-awesome-package#readme",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {}
+}
