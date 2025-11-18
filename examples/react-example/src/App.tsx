@@ -270,6 +270,11 @@ function App() {
           onNodeDoubleClick={(node) => {
             console.log('双击节点:', node);
           }}
+          onNodeAdd={(nodeId, type) => {
+            console.log('添加了新节点:', nodeId, type);
+          }}
+          showToolbar={true}
+          toolbarPosition="top"
         />
       </div>
 
@@ -279,6 +284,7 @@ function App() {
           <div>
             <h4 style={{ marginTop: 0, color: '#1890ff' }}>✨ 拖拽功能</h4>
             <ul style={{ lineHeight: 1.8, fontSize: 14 }}>
+              <li>➕ <strong>添加节点</strong>：点击顶部工具栏按钮添加节点</li>
               <li>🖱️ <strong>拖拽节点</strong>：按住节点可自由移动位置</li>
               <li>🔗 <strong>连接节点</strong>：拖拽节点手柄创建连线</li>
               <li>📝 <strong>配置节点</strong>：双击节点打开配置弹窗</li>

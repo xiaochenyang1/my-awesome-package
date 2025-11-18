@@ -34,6 +34,9 @@ export type {
 export { FlowDesigner } from './components/FlowDesigner';
 export type { FlowDesignerProps } from './components/FlowDesigner';
 
+export { NodeToolbar } from './components/NodeToolbar';
+export type { NodeToolbarProps, NodeTypeDefinition } from './components/NodeToolbar';
+
 // 导出 Hooks
 export { useFlowDesigner } from './hooks/useFlowDesigner';
 export type { UseFlowDesignerOptions, UseFlowDesignerReturn } from './hooks/useFlowDesigner';

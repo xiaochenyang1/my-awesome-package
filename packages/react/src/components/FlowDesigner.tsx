@@ -28,6 +28,7 @@ import 'reactflow/dist/style.css';
 import type { FlowConfig, NodeConfig, EdgeConfig, DataLoaders } from '@flow-designer/core';
 import { StartNode, ApprovalNode, EndNode } from './nodes';
 import { NodeConfigModal } from './NodeConfigModal';
+import { NodeToolbar, NodeTypeDefinition } from './NodeToolbar';
 
 /**
  * 流程设计器 Props
@@ -95,7 +96,45 @@ export interface FlowDesignerProps {
 
   /** 配置保存后的钩子 */
   afterSave?: (config: FlowConfig) => void | Promise<void>;
+
+  // ========== 节点工具栏配置 ==========
+
+  /** 是否显示节点工具栏 */
+  showToolbar?: boolean;
+
+  /** 工具栏位置 */
+  toolbarPosition?: 'top' | 'left' | 'right';
+
+  /** 可添加的节点类型列表（如果不提供，使用默认类型） */
+  availableNodeTypes?: NodeTypeDefinition[];
 }
+
+/**
+ * 默认的节点类型定义
+ */
+const DEFAULT_NODE_TYPES: NodeTypeDefinition[] = [
+  {
+    type: 'start',
+    label: '开始',
+    icon: '🚀',
+    color: '#667eea',
+    description: '流程开始节点'
+  },
+  {
+    type: 'approval',
+    label: '审批',
+    icon: '✅',
+    color: '#1890ff',
+    description: '审批节点'
+  },
+  {
+    type: 'end',
+    label: '结束',
+    icon: '🏁',
+    color: '#f5576c',
+    description: '流程结束节点'
+  }
+];
 
 /**
  * 将 NodeConfig 转换为 ReactFlow 的 Node
@@ -155,7 +194,10 @@ export const FlowDesigner: React.FC<FlowDesignerProps> = (props) => {
     onEdgeAdd,
     onEdgeDelete,
     beforeSave,
-    afterSave
+    afterSave,
+    showToolbar = true,
+    toolbarPosition = 'top',
+    availableNodeTypes = DEFAULT_NODE_TYPES
   } = props;
 
   // 节点类型映射（内置 + 自定义）
@@ -308,6 +350,62 @@ export const FlowDesigner: React.FC<FlowDesignerProps> = (props) => {
     onChange?.(newConfig);
   }, [nodes, edges, config, onChange]);
 
+  // 添加节点
+  const handleAddNode = useCallback(
+    (type: string) => {
+      // 生成新节点 ID
+      const nodeId = `${type}-${Date.now()}`;
+
+      // 查找节点类型定义
+      const nodeTypeDef = availableNodeTypes.find((nt) => nt.type === type);
+
+      // 计算新节点位置（在现有节点右侧）
+      const lastNode = nodes[nodes.length - 1];
+      const position = lastNode
+        ? { x: lastNode.position.x + 300, y: lastNode.position.y }
+        : { x: 100, y: 100 };
+
+      // 创建新的节点配置
+      const newNodeConfig: NodeConfig = {
+        id: nodeId,
+        type,
+        title: nodeTypeDef?.label || type,
+        config: {
+          formSchema: [],
+          formValues: {}
+        }
+      };
+
+      // 创建 ReactFlow 节点
+      const newReactFlowNode: Node = {
+        id: nodeId,
+        type,
+        position,
+        data: {
+          title: newNodeConfig.title,
+          ...newNodeConfig.config
+        }
+      };
+
+      // 更新状态
+      setNodes((nds: Node[]) => [...nds, newReactFlowNode]);
+
+      // 更新配置
+      const newConfig: FlowConfig = {
+        ...config,
+        nodes: [...config.nodes, newNodeConfig]
+      };
+
+      onChange?.(newConfig);
+
+      // 触发回调
+      onNodeAdd?.(nodeId, type);
+
+      console.log('添加节点:', newNodeConfig);
+    },
+    [nodes, config, availableNodeTypes, onChange, onNodeAdd, setNodes]
+  );
+
   return (
     <div
       className={`flow-designer flow-designer-theme-${theme} ${className || ''}`}
@@ -359,6 +457,15 @@ export const FlowDesigner: React.FC<FlowDesignerProps> = (props) => {
         onSave={handleSaveNode}
       />
 
+      {/* 节点工具栏 */}
+      {showToolbar && (
+        <NodeToolbar
+          nodeTypes={availableNodeTypes}
+          onAddNode={handleAddNode}
+          position={toolbarPosition}
+        />
+      )}
+
       {/* 提示信息 */}
       <div
         style={{
@@ -374,7 +481,7 @@ export const FlowDesigner: React.FC<FlowDesignerProps> = (props) => {
           zIndex: 10
         }}
       >
-        💡 提示：双击节点可配置，拖拽节点可移动，连接手柄可创建连线
+        💡 提示：双击节点可配置，拖拽节点可移动，连接手柄可创建连线，点击工具栏可添加节点
       </div>
     </div>
   );
