@@ -17,8 +17,8 @@
 
 ### 框架无关 Framework-Agnostic
 - 核心逻辑：纯 TypeScript，不依赖任何框架
-- React 适配器：`@flow-designer/react`
-- Vue 适配器：`@flow-designer/vue`（TODO）
+- React 适配器：`@xiaoxiao6.0/flow-designer-react` ✅
+- Vue 适配器：`@xiaoxiao6.0/flow-designer-vue` ✅
 
 ---
 
@@ -41,11 +41,14 @@ flow-designer/
 │   │   │   └── hooks/             # React Hooks
 │   │   └── package.json
 │   │
-│   └── vue/                       # Vue 适配器（TODO）
+│   └── vue/                       # Vue 3 适配器
+│   │   ├── src/
+│   │   │   ├── components/        # Vue 组件
+│   │   │   └── composables/       # Composables
+│   │   └── package.json
 │
 ├── examples/
-│   ├── react-example/             # React 示例项目
-│   └── vue-example/               # Vue 示例项目（TODO）
+│   └── react-example/             # React 示例项目
 │
 ├── configs/                       # 配置文件和模板
 ├── docs/                          # 文档
@@ -56,24 +59,31 @@ flow-designer/
 
 ## 快速开始 🚀
 
-### 安装
+### NPM 包安装
 
 ```bash
-# 安装依赖（使用 pnpm）
-pnpm install
+# React 项目
+npm install @xiaoxiao6.0/flow-designer-react
 
-# 或使用 npm
-npm install
+# Vue 3 项目
+npm install @xiaoxiao6.0/flow-designer-vue
+
+# 仅使用核心包（框架无关）
+npm install @xiaoxiao6.0/flow-designer-core
 ```
 
-### 运行示例
+### 本地开发
 
 ```bash
+# 克隆仓库
+git clone https://github.com/xiaochenyang1/my-awesome-package.git
+
+# 安装依赖
+pnpm install
+
 # 运行 React 示例
 cd examples/react-example
 pnpm dev
-
-# 访问 http://localhost:3000
 ```
 
 ---
@@ -85,7 +95,7 @@ pnpm dev
 #### 1. 从 JSON 文件加载配置
 
 ```tsx
-import { FlowDesigner } from '@flow-designer/react';
+import { FlowDesigner } from '@xiaoxiao6.0/flow-designer-react';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -178,6 +188,93 @@ function App() {
     }
   }}
 />
+```
+
+### Vue 使用示例
+
+#### 1. 基础使用
+
+```vue
+<template>
+  <div>
+    <FlowDesigner
+      :config="flowConfig"
+      @change="handleFlowChange"
+      @node-double-click="handleNodeDoubleClick"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { FlowDesigner, type FlowConfig } from '@xiaoxiao6.0/flow-designer-vue';
+
+const flowConfig = ref<FlowConfig>({
+  id: 'flow-1',
+  name: '请假审批流程',
+  version: '1.0.0',
+  nodes: [
+    {
+      id: 'start-1',
+      type: 'start',
+      title: '发起申请',
+      config: {}
+    }
+  ],
+  edges: [],
+  settings: {}
+});
+
+const handleFlowChange = (newConfig: FlowConfig) => {
+  flowConfig.value = newConfig;
+  console.log('流程配置已更新:', newConfig);
+};
+
+const handleNodeDoubleClick = (node: any) => {
+  console.log('双击节点:', node);
+};
+</script>
+```
+
+#### 2. 使用 Composable
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useFlowDesigner, type FlowConfig } from '@xiaoxiao6.0/flow-designer-vue';
+
+const flowConfig = ref<FlowConfig>({
+  id: 'flow-1',
+  name: '审批流程',
+  version: '1.0.0',
+  nodes: [],
+  edges: [],
+  settings: {}
+});
+
+const {
+  nodes,
+  edges,
+  addNode,
+  updateNode,
+  validate
+} = useFlowDesigner({
+  config: flowConfig,
+  onChange: (newConfig) => {
+    console.log('配置已更新:', newConfig);
+  }
+});
+
+// 添加节点
+const handleAddNode = () => {
+  addNode({
+    id: `approval-${Date.now()}`,
+    type: 'approval',
+    title: '审批节点',
+    config: {}
+  });
+};
+</script>
 ```
 
 ---
@@ -356,10 +453,10 @@ interface NodeConfig {
 - 支持自定义组件
 
 ### 4. 框架无关
-- 核心逻辑完全独立（`@flow-designer/core`）
+- 核心逻辑完全独立（`@xiaoxiao6.0/flow-designer-core`）
 - 可适配任何前端框架
-- 当前支持：React
-- 计划支持：Vue、Angular、Svelte
+- 当前支持：React、Vue 3
+- 计划支持：Angular、Svelte
 
 ### 5. TypeScript 类型安全
 - 完整的类型定义
@@ -493,20 +590,23 @@ onChange={(newConfig) => {
 
 ## 路线图 🗺️
 
-### v1.0（当前版本）
-- [x] 核心包（`@flow-designer/core`）
-- [x] React 适配器（`@flow-designer/react`）
+### v1.0（当前版本）✅
+- [x] 核心包（`@xiaoxiao6.0/flow-designer-core`）
+- [x] React 适配器（`@xiaoxiao6.0/flow-designer-react`）
+- [x] Vue 3 适配器（`@xiaoxiao6.0/flow-designer-vue`）
+- [x] 完整的拖拽功能（基于 ReactFlow / VueFlow）
+- [x] 可视化画布
 - [x] 动态表单支持
 - [x] 配置引擎
 - [x] 事件系统
+- [x] 节点工具栏
 - [x] 示例项目
+- [x] 完整文档
 
 ### v1.1（计划中）
-- [ ] Vue 适配器（`@flow-designer/vue`）
-- [ ] 完整的拖拽功能（基于 ReactFlow）
-- [ ] 可视化画布
-- [ ] 节点配置弹窗
-- [ ] 工具栏
+- [ ] 节点配置弹窗（动态表单）
+- [ ] 完整的表单字段验证
+- [ ] 数据加载器（loaders）集成
 
 ### v1.2（计划中）
 - [ ] 条件分支支持
@@ -535,7 +635,7 @@ onChange={(newConfig) => {
 **A**: 通过 `nodeComponents` 传入自定义组件，配置文件中使用对应的 `type` 即可。
 
 ### Q4: 支持哪些前端框架？
-**A**: 当前支持 React，Vue 版本正在开发中。核心包（`@flow-designer/core`）是框架无关的，可以适配任何框架。
+**A**: 当前支持 React 和 Vue 3。核心包（`@xiaoxiao6.0/flow-designer-core`）是框架无关的，可以适配任何框架。Angular 和 Svelte 版本计划中。
 
 ---
 
