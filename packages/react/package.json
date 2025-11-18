@@ -1,6 +1,6 @@
 {
   "name": "@xiaoxiao6.0/flow-designer-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "流程设计器 React 适配器",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
